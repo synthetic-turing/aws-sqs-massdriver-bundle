@@ -65,11 +65,3 @@ resource "aws_sns_topic_subscription" "main" {
   topic_arn            = var.topic.data.infrastructure.arn
   endpoint             = aws_sqs_queue.main.arn
 }
-
-
-
-
-# # presets
-# # TODO: create a 'subscriber' policy that can be forwarded downstream (dont add a publisher, SNS is your publisher)
-# # alarms
-# # test redrive

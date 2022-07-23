@@ -5,6 +5,10 @@ ref: github.com/massdriver-cloud/aws-sqs-pubsub-subscription
 access: "public"
 type: "bundle"
 
+steps:
+  - path: src
+    provisioner: terraform
+
 params:
   examples:
     - __name: Default Queue
