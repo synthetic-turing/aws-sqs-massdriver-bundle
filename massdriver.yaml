@@ -29,6 +29,7 @@ params:
         - max_message_size
       properties:
         region:
+          description: Region should generally be set to the same as the publisher topic. Selecting a different region will enable multi-region mode.
           $ref: https://raw.githubusercontent.com/massdriver-cloud/artifact-definitions/main/definitions/types/aws-region.json
         visibility_timeout_seconds:
           type: integer
