@@ -1,7 +1,7 @@
 resource "massdriver_artifact" "queue" {
   field                = "queue"
   provider_resource_id = aws_sqs_queue.main.arn
-  name                 = "AWS SQS Queue: ${local.name}"
+  name                 = "AWS SQS Pub/Sub queue: ${local.name}"
   artifact = jsonencode(
     {
       data = {
@@ -28,7 +28,7 @@ resource "massdriver_artifact" "queue" {
 resource "massdriver_artifact" "dlq" {
   field                = "dlq"
   provider_resource_id = aws_sqs_queue.dlq.arn
-  name                 = "AWS SQS DLQ: ${local.name}"
+  name                 = "AWS SQS dead-letter queue: ${local.name}"
   artifact = jsonencode(
     {
       data = {
