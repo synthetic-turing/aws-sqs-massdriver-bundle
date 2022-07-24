@@ -31,7 +31,7 @@ data "aws_iam_policy_document" "sns_kms" {
 
 module "kms_key" {
   count       = local.is_multi_region ? 1 : 0
-  source      = "github.com/massdriver-cloud/terraform-modules//aws/aws-kms-key?ref=7dbcf1e"
+  source      = "github.com/massdriver-cloud/terraform-modules//aws/aws-kms-key?ref=afe781a"
   md_metadata = var.md_metadata
   policy      = data.aws_iam_policy_document.sns_kms.json
 }
