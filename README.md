@@ -47,8 +47,32 @@ Form input parameters for configuring a bundle for deployment.
 <summary>View</summary>
 
 <!-- PARAMS:START -->
+## Properties
 
-**Params coming soon**
+- **`queue`** *(object)*
+  - **`max_message_size`** *(integer)*: The limit of how many bytes a message can contain before Amazon SQS rejects it. Minimum: `1024`. Maximum: `262144`. Default: `262144`.
+  - **`message_retention_seconds`** *(integer)*: The number of seconds Amazon SQS retains a message. The default for this attribute is 345600 (4 days). Minimum: `60`. Maximum: `1209600`. Default: `345600`.
+  - **`region`** *(string)*: Region should generally be set to the same as the publisher topic. Selecting a different region will enable multi-region mode.
+
+    Examples:
+    ```json
+    "us-west-2"
+    ```
+
+  - **`visibility_timeout_seconds`** *(integer)*: The visibility timeout for the queue. The default for this attribute is 30. Minimum: `0`. Maximum: `43200`. Default: `30`.
+## Examples
+
+  ```json
+  {
+      "__name": "Default Queue",
+      "queue": {
+          "max_message_size": 262144,
+          "message_retention_seconds": 345600,
+          "region": "us-east-1",
+          "visibility_timeout_seconds": 30
+      }
+  }
+  ```
 
 <!-- PARAMS:END -->
 
@@ -62,9 +86,93 @@ Connections from other bundles that this bundle depends on.
 <summary>View</summary>
 
 <!-- CONNECTIONS:START -->
+## Properties
 
-**Connections coming soon**
+- **`aws_authentication`** *(object)*: . Cannot contain additional properties.
+  - **`data`** *(object)*
+    - **`arn`** *(string)*: Amazon Resource Name.
 
+      Examples:
+      ```json
+      "arn:aws:rds::ACCOUNT_NUMBER:db/prod"
+      ```
+
+      ```json
+      "arn:aws:ec2::ACCOUNT_NUMBER:vpc/vpc-foo"
+      ```
+
+    - **`external_id`** *(string)*: An external ID is a piece of data that can be passed to the AssumeRole API of the Security Token Service (STS). You can then use the external ID in the condition element in a role's trust policy, allowing the role to be assumed only when a certain value is present in the external ID.
+  - **`specs`** *(object)*
+    - **`aws`** *(object)*: .
+      - **`region`** *(string)*: AWS Region to provision in.
+
+        Examples:
+        ```json
+        "us-west-2"
+        ```
+
+      - **`resource`** *(string)*
+      - **`service`** *(string)*
+      - **`zone`** *(string)*: AWS Availability Zone.
+
+        Examples:
+- **`topic`** *(object)*: Cannot contain additional properties.
+  - **`data`** *(object)*
+    - **`infrastructure`** *(object)*
+      - **`arn`** *(string)*: Amazon Resource Name.
+
+        Examples:
+        ```json
+        "arn:aws:rds::ACCOUNT_NUMBER:db/prod"
+        ```
+
+        ```json
+        "arn:aws:ec2::ACCOUNT_NUMBER:vpc/vpc-foo"
+        ```
+
+    - **`security`** *(object)*: Informs downstream services of network and/or IAM policies. Cannot contain additional properties.
+      - **`iam`** *(object)*: IAM Policies. Cannot contain additional properties.
+        - **`^[a-z-/]+$`** *(object)*
+          - **`policy_arn`** *(string)*: AWS IAM policy ARN.
+
+            Examples:
+            ```json
+            "arn:aws:rds::ACCOUNT_NUMBER:db/prod"
+            ```
+
+            ```json
+            "arn:aws:ec2::ACCOUNT_NUMBER:vpc/vpc-foo"
+            ```
+
+      - **`network`** *(object)*: AWS security group rules to inform downstream services of ports to open for communication. Cannot contain additional properties.
+        - **`^[a-z-]+$`** *(object)*
+          - **`arn`** *(string)*: Amazon Resource Name.
+
+            Examples:
+            ```json
+            "arn:aws:rds::ACCOUNT_NUMBER:db/prod"
+            ```
+
+            ```json
+            "arn:aws:ec2::ACCOUNT_NUMBER:vpc/vpc-foo"
+            ```
+
+          - **`port`** *(integer)*: Port number. Minimum: `0`. Maximum: `65535`.
+          - **`protocol`** *(string)*: Must be one of: `['tcp', 'udp']`.
+  - **`specs`** *(object)*
+    - **`aws`** *(object)*: .
+      - **`region`** *(string)*: AWS Region to provision in.
+
+        Examples:
+        ```json
+        "us-west-2"
+        ```
+
+      - **`resource`** *(string)*
+      - **`service`** *(string)*
+      - **`zone`** *(string)*: AWS Availability Zone.
+
+        Examples:
 <!-- CONNECTIONS:END -->
 
 </details>
@@ -77,9 +185,122 @@ Resources created by this bundle that can be connected to other bundles.
 <summary>View</summary>
 
 <!-- ARTIFACTS:START -->
+## Properties
 
-**Artifacts coming soon**
+- **`dlq`** *(object)*: Cannot contain additional properties.
+  - **`data`** *(object)*
+    - **`infrastructure`** *(object)*
+      - **`arn`** *(string)*: Amazon Resource Name.
 
+        Examples:
+        ```json
+        "arn:aws:rds::ACCOUNT_NUMBER:db/prod"
+        ```
+
+        ```json
+        "arn:aws:ec2::ACCOUNT_NUMBER:vpc/vpc-foo"
+        ```
+
+    - **`security`** *(object)*: Informs downstream services of network and/or IAM policies. Cannot contain additional properties.
+      - **`iam`** *(object)*: IAM Policies. Cannot contain additional properties.
+        - **`^[a-z-/]+$`** *(object)*
+          - **`policy_arn`** *(string)*: AWS IAM policy ARN.
+
+            Examples:
+            ```json
+            "arn:aws:rds::ACCOUNT_NUMBER:db/prod"
+            ```
+
+            ```json
+            "arn:aws:ec2::ACCOUNT_NUMBER:vpc/vpc-foo"
+            ```
+
+      - **`network`** *(object)*: AWS security group rules to inform downstream services of ports to open for communication. Cannot contain additional properties.
+        - **`^[a-z-]+$`** *(object)*
+          - **`arn`** *(string)*: Amazon Resource Name.
+
+            Examples:
+            ```json
+            "arn:aws:rds::ACCOUNT_NUMBER:db/prod"
+            ```
+
+            ```json
+            "arn:aws:ec2::ACCOUNT_NUMBER:vpc/vpc-foo"
+            ```
+
+          - **`port`** *(integer)*: Port number. Minimum: `0`. Maximum: `65535`.
+          - **`protocol`** *(string)*: Must be one of: `['tcp', 'udp']`.
+  - **`specs`** *(object)*
+    - **`aws`** *(object)*: .
+      - **`region`** *(string)*: AWS Region to provision in.
+
+        Examples:
+        ```json
+        "us-west-2"
+        ```
+
+      - **`resource`** *(string)*
+      - **`service`** *(string)*
+      - **`zone`** *(string)*: AWS Availability Zone.
+
+        Examples:
+- **`queue`** *(object)*: Cannot contain additional properties.
+  - **`data`** *(object)*
+    - **`infrastructure`** *(object)*
+      - **`arn`** *(string)*: Amazon Resource Name.
+
+        Examples:
+        ```json
+        "arn:aws:rds::ACCOUNT_NUMBER:db/prod"
+        ```
+
+        ```json
+        "arn:aws:ec2::ACCOUNT_NUMBER:vpc/vpc-foo"
+        ```
+
+    - **`security`** *(object)*: Informs downstream services of network and/or IAM policies. Cannot contain additional properties.
+      - **`iam`** *(object)*: IAM Policies. Cannot contain additional properties.
+        - **`^[a-z-/]+$`** *(object)*
+          - **`policy_arn`** *(string)*: AWS IAM policy ARN.
+
+            Examples:
+            ```json
+            "arn:aws:rds::ACCOUNT_NUMBER:db/prod"
+            ```
+
+            ```json
+            "arn:aws:ec2::ACCOUNT_NUMBER:vpc/vpc-foo"
+            ```
+
+      - **`network`** *(object)*: AWS security group rules to inform downstream services of ports to open for communication. Cannot contain additional properties.
+        - **`^[a-z-]+$`** *(object)*
+          - **`arn`** *(string)*: Amazon Resource Name.
+
+            Examples:
+            ```json
+            "arn:aws:rds::ACCOUNT_NUMBER:db/prod"
+            ```
+
+            ```json
+            "arn:aws:ec2::ACCOUNT_NUMBER:vpc/vpc-foo"
+            ```
+
+          - **`port`** *(integer)*: Port number. Minimum: `0`. Maximum: `65535`.
+          - **`protocol`** *(string)*: Must be one of: `['tcp', 'udp']`.
+  - **`specs`** *(object)*
+    - **`aws`** *(object)*: .
+      - **`region`** *(string)*: AWS Region to provision in.
+
+        Examples:
+        ```json
+        "us-west-2"
+        ```
+
+      - **`resource`** *(string)*
+      - **`service`** *(string)*
+      - **`zone`** *(string)*: AWS Availability Zone.
+
+        Examples:
 <!-- ARTIFACTS:END -->
 
 </details>
