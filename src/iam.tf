@@ -5,6 +5,12 @@ locals {
     Resource = aws_sqs_queue.main.arn
   }]
 
+  _write_statement = [{
+    Action   = ["sqs:SendMessage", "sqs:SendMessageBatch"]
+    Effect   = "Allow"
+    Resource = aws_sqs_queue.main.arn
+  }]
+
   _dlq_statement = [{
     Action   = ["sqs:ReceiveMessage", "sqs:DeleteMessage", "sqs:GetQueueAttributes"]
     Effect   = "Allow"
@@ -28,6 +34,16 @@ resource "aws_iam_policy" "subscribe" {
   policy = jsonencode({
     Version   = "2012-10-17"
     Statement = local.subscribe_statement
+  })
+}
+
+resource "aws_iam_policy" "write" {
+  name        = "${local.name}-write"
+  description = "SQS write policy: ${local.name}"
+
+  policy = jsonencode({
+    Version   = "2012-10-17"
+    Statement = local._write_statement
   })
 }
 

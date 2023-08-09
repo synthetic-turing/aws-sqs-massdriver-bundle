@@ -1,8 +1,8 @@
 schema: draft-07
-name: "aws-sqs-pubsub-subscription"
-description: "AWS SQS Pub/Sub Subscription is an encrypted SQS Queue designed for Pub/Sub fan-out messaging with AWS SNS."
-source_url: github.com/massdriver-cloud/aws-sqs-pubsub-subscription
-access: "public"
+name: "aws-sqs-queue"
+description: "AWS SQS Queue"
+source_url: github.com/synthetic-turing/aws-sqs-massdriver-bundle
+access: "private"
 type: "infrastructure"
 
 steps:
@@ -96,11 +96,22 @@ params:
       type: object
       title: Queue
       required:
+        - type
         - region
         - visibility_timeout_seconds
         - message_retention_seconds
         - max_message_size
       properties:
+        type:
+          title: Queue Type
+          description: Standard or FIFO queue
+          type: string
+          default: standard
+          oneOf:
+          - title: Standard
+            const: standard
+          - title: FIFO
+            const: fifo
         region:
           description: Region should generally be set to the same as the publisher topic. Selecting a different region will enable multi-region mode.
           $ref: https://raw.githubusercontent.com/massdriver-cloud/artifact-definitions/main/definitions/types/aws-region.json
@@ -138,12 +149,9 @@ params:
 connections:
   required:
     - aws_authentication
-    - topic
   properties:
     aws_authentication:
       $ref: massdriver/aws-iam-role
-    topic:
-      $ref: massdriver/aws-sns-topic
 
 artifacts:
   required:
@@ -162,6 +170,7 @@ ui:
   queue:
     ui:order:
       - region
+      - type
       - visibility_timeout_seconds
       - message_retention_seconds
       - max_message_size

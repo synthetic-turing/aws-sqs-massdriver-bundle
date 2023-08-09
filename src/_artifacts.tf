@@ -13,6 +13,9 @@ resource "massdriver_artifact" "queue" {
             subscribe = {
               policy_arn = aws_iam_policy.subscribe.arn
             }
+            write = {
+              policy_arn = aws_iam_policy.write.arn
+            }
           }
         }
       }
