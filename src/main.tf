@@ -1,4 +1,3 @@
-
 locals {
   fifo_ext                = ".fifo"
   is_fifo                 = var.queue.type == "fifo"
@@ -24,6 +23,7 @@ resource "aws_sqs_queue" "main" {
     deadLetterTargetArn = aws_sqs_queue.dlq.arn
     maxReceiveCount     = 3
   })
+
 }
 
 resource "aws_sqs_queue" "dlq" {
