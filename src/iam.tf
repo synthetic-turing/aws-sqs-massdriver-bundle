@@ -1,6 +1,6 @@
 locals {
   _subscribe_statement = [{
-    Action   = ["sqs:ReceiveMessage", "sqs:DeleteMessage", "sqs:GetQueueAttributes"]
+    Action   = ["sqs:ReceiveMessage", "sqs:DeleteMessage", "sqs:ChangeMessageVisibility", "sqs:GetQueueAttributes"]
     Effect   = "Allow"
     Resource = aws_sqs_queue.main.arn
   }]
@@ -12,7 +12,7 @@ locals {
   }]
 
   _dlq_statement = [{
-    Action   = ["sqs:ReceiveMessage", "sqs:DeleteMessage", "sqs:GetQueueAttributes"]
+    Action   = ["sqs:ReceiveMessage", "sqs:DeleteMessage", "sqs:ChangeMessageVisibility", "sqs:GetQueueAttributes"]
     Effect   = "Allow"
     Resource = aws_sqs_queue.dlq.arn
   }]
